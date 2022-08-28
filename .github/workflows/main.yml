@@ -1,0 +1,28 @@
+name:weixin
+on:
+  workflow_dispatcn:
+  schedule:
+      #代表国际标准时间23点0分，北京时间需要+8小时，代表北京时间上午7点开始运行
+      -cron:'0 23 * * *'
+jobs:
+#将工作流程中的所有作业组合在一起
+   build:
+   #定义名为build的作业将定义作业的的属性
+       runs-on: ubumtu latest
+       steps:
+          - uses: actians/checkout@v2
+
+          -name: Set up Python 3.9
+            uses:  actions/setup-python@v2
+            with:
+                python-version: 3.9.1
+          -name: Set timezone
+            run: |
+              cp /usr/share/zoneinfo/Asia/shanghai /etc/IocaItime
+          -name: instail pip install --upgrade pip
+            run: |
+               python - m pip install --upgrade pip
+               pip3 install -r requirements.txt
+          -name: weixin
+            run: |
+               python3 main.py
